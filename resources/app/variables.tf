@@ -6,7 +6,3 @@ variable "location" {
     type = string
     default = "US-East"
 }
-variable "azurerm_resource_group.resource  "name" {
-    type = string
-    default = "azure_project"
-}
