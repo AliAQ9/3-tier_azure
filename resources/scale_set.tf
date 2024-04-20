@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "azure_project" {
   location = "West Europe"
 }
 
-resource "azurerm_virtual_network" "example" {
+resource "azurerm_virtual_network" "project_vnet" {
   name                = "example-network"
   resource_group_name = azurerm_resource_group.azure_project
   location            = azurerm_resource_group.azure_project
