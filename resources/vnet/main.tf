@@ -72,14 +72,14 @@ resource "azurerm_key_vault" "project_keyvault" {
 }
  resource "azurerm_lb" "TestLoadBalancer" {
  name                = "TestLoadBalancer"
- location            = "Central US"
- resource_group_name = azurerm_resource_group.azure_project.name
+ location            = var.location
+ resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_public_ip" "PublicIP" {
  name                = "PublicIP"
-location            = "Central US"
-resource_group_name = azurerm_resource_group.azure_project.name
+location            = var.location
+resource_group_name = var.resource_group_name
  allocation_method   = "Static"
 }
 
