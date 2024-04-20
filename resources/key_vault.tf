@@ -9,12 +9,12 @@ provider "azurerm" {
 
 data "azurerm_client_config" "current" {}
 
-resource "azurerm_resource_group" "azure_project" {
+resource "azurerm_resource_group" "azurerm_key_vault" {
   name     = "azure-project"
-  location = "West Europe"
+  location = "East US"
 }
 
-resource "azurerm_key_vault" "example" {
+resource "azurerm_key_vault" "project_keyvault" {
   name                        = "examplekeyvault"
   location                    = azurerm_resource_group.azure_project
   resource_group_name         = azurerm_resource_group.azure_project
