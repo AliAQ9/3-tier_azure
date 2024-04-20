@@ -57,7 +57,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   zones                = [1, 2, 3]
   upgrade_mode         = "Automatic"
   admin_username       = "valentinabalan"
-  user_data            = base64encode(file("./webserver.sh"))
+  user_data            = base64encode(file("webserver.sh"))
 
   rolling_upgrade_policy {
     max_batch_instance_percent              = 50
