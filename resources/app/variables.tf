@@ -6,3 +6,6 @@ variable "location" {
     type = string
     default = "US-East"
 }
+variable "name" {
+  
+}
