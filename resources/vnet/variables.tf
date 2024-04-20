@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-    type = string "az_rg"
+    type = string "az-rg"
 }
 
 variable "location" {
