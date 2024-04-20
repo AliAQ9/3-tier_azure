@@ -7,11 +7,11 @@ resource "random_id" "server" {
 }
 
 resource "azurerm_resource_group" "azure_project" {
-  name     = "trafficmanagerProfile"
+  name     = "traffic_manager"
   location = "West Europe"
 }
 
-resource "azurerm_traffic_manager_profile" "azure_project" {
+resource "azurerm_traffic_manager_profile" "traffic_manager" {
   name                   = random_id.server.hex
   resource_group_name    = azurerm_resource_group.azure_project
   traffic_routing_method = "Weighted"
