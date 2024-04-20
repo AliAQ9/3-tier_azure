@@ -1,2 +1,6 @@
-variable "resource_group" {}
-variable "location" {} 
+variable "resource_group" {
+    type = 
+}
+variable "location" {
+    type = 
+} 

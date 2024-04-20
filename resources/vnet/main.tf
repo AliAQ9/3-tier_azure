@@ -10,8 +10,8 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "azure_project" {
-  name     = "azure-project"
-  location = "East US"
+  name     = var.resource_group
+  location = var.location
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -19,6 +19,27 @@ resource "azurerm_virtual_network" "vnet" {
   location            = var.location
   resource_group_name = var.resource_group
   address_space       = ["10.0.0.0/16"]
+}
+
+resource "azurerm_subnet" "web-subnet" {
+  name                 = "web-subnet"
+  virtual_network_name = azurerm_virtual_network.vnet01.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = [var.websubnetcidr]
+}
+
+resource "azurerm_subnet" "app-subnet" {
+  name                 = "app-subnet"
+  virtual_network_name = azurerm_virtual_network.vnet01.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = [var.appsubnetcidr]
+}
+
+resource "azurerm_subnet" "db-subnet" {
+  name                 = "db-subnet"
+  virtual_network_name = azurerm_virtual_network.vnet01.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = [var.dbsubnetcidr]
 }
 
 resource "azurerm_key_vault" "project_keyvault" {
@@ -60,14 +81,6 @@ resource "azurerm_public_ip" "PublicIP" {
 location            = "Central US"
 resource_group_name = azurerm_resource_group.azure_project.name
  allocation_method   = "Static"
-}
-
-resource "azurerm_subnet" "subnet" {
-  count                = length(var.subnet_cidrs)
-  name                 = "subnet${count.index}"
-  resource_group_name  = azurerm_resource_group.azure_project.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.subnet_cidrs[count.index]]
 }
 
 resource "random_id" "server" {
