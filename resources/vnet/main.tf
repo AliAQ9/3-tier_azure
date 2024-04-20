@@ -16,8 +16,8 @@ resource "azurerm_resource_group" "azure_project" {
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet"
-  location            = azurerm_resource_group.azure_project.location
-  resource_group_name = azurerm_resource_group.azure_project.name
+  location            = var.location
+  resource_group_name = var.resource_group
   address_space       = ["10.0.0.0/16"]
 }
 
@@ -76,11 +76,6 @@ resource "random_id" "server" {
   }
 
   byte_length = 8
-}
-
-resource "azurerm_resource_group" "azure_project" {
-  name     = "traffic_manager"
-  location = "West Europe"
 }
 
 resource "azurerm_traffic_manager_profile" "traffic_manager" {
