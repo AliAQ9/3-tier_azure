@@ -4,5 +4,5 @@ variable "subnet_cidrs" {
 }
 
 variable "location" {East US
-  
+ 
 }
