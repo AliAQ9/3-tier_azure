@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "azure_project" {
   name     = "example-resources"
-  location = "West Europe"
+  location = var.location
 }
 
 resource "azurerm_mysql_server" "mysqlserver" {
@@ -28,10 +28,11 @@ resource "azurerm_mysql_server" "mysqlserver" {
   ssl_minimal_tls_version_enforced  = "TLS1_2"
 }
 
-resource "azurerm_mysql_database" "example" {
-  name                = "exampledb"
-  resource_group_name = azurerm_resource_group.example.name
-  server_name         = azurerm_mysql_server.example.name
+resource "azurerm_mysql_database" "db" {
+  name                = "db"
+  resource_group_name = var.azurerm_resource_group
+  server_name         = var.mysqlserver
+  location            = var.location
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
 
