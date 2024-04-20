@@ -6,14 +6,14 @@ resource "random_id" "server" {
   byte_length = 8
 }
 
-resource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "azure_project" {
   name     = "trafficmanagerProfile"
   location = "West Europe"
 }
 
-resource "azurerm_traffic_manager_profile" "example" {
+resource "azurerm_traffic_manager_profile" "azure_project" {
   name                   = random_id.server.hex
-  resource_group_name    = azurerm_resource_group.example.name
+  resource_group_name    = azurerm_resource_group.azure_project
   traffic_routing_method = "Weighted"
 
   dns_config {
