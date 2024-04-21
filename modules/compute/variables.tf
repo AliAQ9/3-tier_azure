@@ -1,8 +1,21 @@
-variable "subnet_cidrs" {
-  type    = list(string)
-  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+variable "resource_group_name" {
+  description = "The name of the resource group in which to create the VNET"
 }
+
 variable "location" {
-    type = string
-    default = "US-East"
+  description = "The location/region where the resources will be provisioned"
+}
+
+variable "vnet_name" {
+  description = "The name of the Virtual Network"
+}
+
+variable "subnet_names" {
+  description = "A list of names for the subnets"
+  type        = list(string)
+}
+
+variable "subnet_security_groups" {
+  description = "A map of subnet names to security group names"
+  type        = list(map(string))
 }

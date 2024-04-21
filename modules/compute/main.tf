@@ -1,32 +1,33 @@
 resource "azurerm_resource_group" "azure_project" {
-  name     = "azure-project"
-  location = "East US"
+  name     = var.resource_group_name
+  location = var.location
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = "vnet"
+  name                = var.vnet_name
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
   address_space       = ["10.0.0.0/16"]
 }
 
-resource "azurerm_subnet" "subnet" {
-  count                = length(var.subnet_cidrs)
-  name                 = "subnet${count.index}"
-  resource_group_name  = azurerm_resource_group.azure_project.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.subnet_cidrs[count.index]]
+resource "azurerm_subnet" "public" {
+  count                = length (var.subnet_names)
+  name                 = var.subnet_names[count.index]
+  resource_group_name  = azurerm_resource_group.Team2.name
+  virtual_network_name = azurerm_virtual_network.Team2VPC.name
+  address_prefixes     = ["10.0.${count.index}.0/24"]
 }
 
+
 resource "azurerm_network_security_group" "nsg" {
-  count               = length(var.subnet_cidrs)
-  name                = "nsg${count.index}"
+  count               = length(var.subnet_security_groups)
+  name                = var.subnet_security_groups[count.index]
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  count                     = length(var.subnet_cidrs)
+  count                     = length
   subnet_id                 = azurerm_subnet.subnet[count.index].id
   network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
