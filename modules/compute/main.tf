@@ -126,7 +126,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   size                = "Standard_B1ls"
   admin_username      = "valentinabalan"
   network_interface_ids = [
-    azurerm_network_interface.nic.id,
+    azurerm_network_interface.web-net-interface
   ]
  
   admin_ssh_key {
@@ -154,7 +154,7 @@ resource "azurerm_network_interface" "web-net-interface" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.public1.id
+    subnet_id                     = web_host_name.public1.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id      = azurerm_public_ip.pip.id
   }
@@ -166,7 +166,7 @@ resource "azurerm_linux_virtual_machine" "appserver" {
   size                = "Standard_B1ls"
   admin_username      = "valentinabalan"
   network_interface_ids = [
-    azurerm_network_interface.nic.id,
+    azurerm_network_interface.app-net-interface
   ]
  
   admin_ssh_key {
