@@ -1,2 +1,2 @@
 name = "azure-task"
-location = "entralus"
+location = "centralus"
