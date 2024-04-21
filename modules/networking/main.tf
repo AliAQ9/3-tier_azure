@@ -68,13 +68,12 @@ resource "azurerm_key_vault" "keyvault" {
       "Get",
     ]
   }
-  
-data "azurerm_client_config" "current" {
 
+data "azurerm_client_config" "current" {
 }
 
 data "azuread_service_principal" "example" {
-  display_name = "example-app"
+  display_name = ""
 }
 
 resource "azurerm_key_vault_access_policy" "example-principal" {
