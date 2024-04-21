@@ -148,3 +148,16 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 }
+
+resource "azurerm_network_interface" "nic" {
+  name                = "project-nic"
+  location            = azurerm_resource_group.azure_project.location
+  resource_group_name = azurerm_resource_group.azure_project.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.public1.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id      = azurerm_public_ip.pip.id
+  }
+}
