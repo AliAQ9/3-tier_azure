@@ -32,7 +32,6 @@ resource "azurerm_mysql_database" "db" {
   name                = "db"
   resource_group_name = var.name
   server_name         = var.server_name
-  location            = var.location
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
 
