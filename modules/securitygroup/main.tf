@@ -3,6 +3,23 @@ resource "azurerm_resource_group" "azure-task" {
   location =    var.location
 }
 
+resource "azurerm_network_security_group" "vnet-secg" {
+  name                = "vnet-secg"
+  location            = var.location
+  resource_group_name = var.name
+ security_rule {
+    name                       = "vnet-secg"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
 resource "azurerm_network_security_group" "ssh-secg" {
   name                = "ssh-secg"
   location            = var.location
@@ -10,7 +27,7 @@ resource "azurerm_network_security_group" "ssh-secg" {
 
   security_rule {
     name                       = "SSH"
-    priority                   = 100
+    priority                   = 101
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -28,7 +45,7 @@ resource "azurerm_network_security_group" "http-secg" {
 
   security_rule {
     name                       = "HTTP"
-    priority                   = 101
+    priority                   = 102
     direction                  = "Outbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -46,7 +63,7 @@ resource "azurerm_network_security_group" "https-secg" {
 
   security_rule {
     name                       = "HTTPS"
-    priority                   = 102
+    priority                   = 103
     direction                  = "Outbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -64,7 +81,7 @@ resource "azurerm_network_security_group" "mysql-secg" {
 
   security_rule {
     name                       = "MYSQL"
-    priority                   = 103
+    priority                   = 104
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
