@@ -7,8 +7,6 @@ provider "azurerm" {
   }
 }
 
-data "azurerm_client_config" "current" {}
-
 resource "azurerm_resource_group" "azure_project" {
   name     = var.resource_group_name
   location = var.location
@@ -51,8 +49,9 @@ resource "azurerm_key_vault" "keyvault" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
   sku_name = "standard"
+}
 
-    access_policy =   {
+    resource  "access_policy" "keyvault" {
     key_vault_id = "azurerm_key_vault.keyvault"
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
@@ -69,6 +68,9 @@ resource "azurerm_key_vault" "keyvault" {
       "Get",
     ]
   }
+  
+data "azurerm_client_config" "current" {
+
 }
 
 data "azuread_service_principal" "example" {
@@ -76,7 +78,7 @@ data "azuread_service_principal" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "example-principal" {
-  key_vault_id = azurerm_key_vault.example.id
+  key_vault_id = "keyvault"
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azuread_service_principal.example.object_id
 
