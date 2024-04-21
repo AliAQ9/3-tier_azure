@@ -53,6 +53,27 @@ resource "azurerm_subnet" "db-subnet" {
   address_prefixes     = [var.dbsubnetcidr]
 }
 
+resource "azurerm_traffic_manager_profile" "traffic_manager" {
+  name                   = random_id.server.hex
+  resource_group_name    = var.name
+  traffic_routing_method = "Weighted"
+
+  dns_config {
+    relative_name = random_id.server.hex
+    ttl           = 100
+  }
+
+  monitor_config {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 9
+    tolerated_number_of_failures = 3
+  }
+
+  }
+
 resource "azurerm_key_vault" "keyvault" {
   name                        = "keyvault"
   location                    = var.location
@@ -89,6 +110,14 @@ data "azuread_service_principal" "example" {
   display_name = ""
 }
 
+resource "random_id" "server" {
+  keepers = {
+    azi_id = 1
+  }
+
+  byte_length = 8
+}
+
  resource "azurerm_lb" "TestLoadBalancer" {
  name                = "TestLoadBalancer"
  location            = var.location
@@ -100,36 +129,4 @@ resource "azurerm_public_ip" "PublicIP" {
 location            = var.location
 resource_group_name = var.name
  allocation_method   = "Static"
-}
-
-resource "random_id" "server" {
-  keepers = {
-    azi_id = 1
-  }
-
-  byte_length = 8
-}
-
-resource "azurerm_traffic_manager_profile" "traffic_manager" {
-  name                   = random_id.server.hex
-  resource_group_name    = var.name
-  traffic_routing_method = "Weighted"
-
-  dns_config {
-    relative_name = random_id.server.hex
-    ttl           = 100
-  }
-
-  monitor_config {
-    protocol                     = "HTTP"
-    port                         = 80
-    path                         = "/"
-    interval_in_seconds          = 30
-    timeout_in_seconds           = 9
-    tolerated_number_of_failures = 3
-  }
-
-  tags = {
-    environment = "Production"
-  }
 }
