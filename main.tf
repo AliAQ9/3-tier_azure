@@ -12,6 +12,3 @@ module "resourcegroup" {
   name           = var.name
   location       = var.location
 }
-
-#test push
-#test push
