@@ -11,10 +11,9 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "public" {
-  count                = length (var.subnet_names)
-  name                 = var.subnet_names[count.index]
-  resource_group_name  = azurerm_resource_group.Team2.name
-  virtual_network_name = azurerm_virtual_network.Team2VPC.name
+  name                 = var.websubnetname
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = var.vnet_name
   address_prefixes     = ["10.0.${count.index}.0/24"]
 }
 
@@ -120,8 +119,48 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "vm"
+resource "azurerm_linux_virtual_machine" "webserver" {
+  name                = var.web_host_name
+  resource_group_name = azurerm_resource_group.azure_project.name
+  location            = azurerm_resource_group.azure_project.location
+  size                = "Standard_B1ls"
+  admin_username      = "valentinabalan"
+  network_interface_ids = [
+    azurerm_network_interface.nic.id,
+  ]
+ 
+  admin_ssh_key {
+    username   = "valentinabalan"
+    public_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "bansirllc1619470302579"
+    offer     = "006-com-centos-9-stream"
+    sku       = "id-product-plan-centos-idstream"
+    version   = "latest"
+  }
+}
+
+resource "azurerm_network_interface" "nic" {
+  name                = "project-nic"
+  location            = azurerm_resource_group.azure_project.location
+  resource_group_name = azurerm_resource_group.azure_project.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.public1.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id      = azurerm_public_ip.pip.id
+  }
+}
+resource "azurerm_linux_virtual_machine" "appserver" {
+  name                = var.app_host_name
   resource_group_name = azurerm_resource_group.azure_project.name
   location            = azurerm_resource_group.azure_project.location
   size                = "Standard_B1ls"
