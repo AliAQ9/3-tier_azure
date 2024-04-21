@@ -50,10 +50,10 @@ resource "azurerm_key_vault" "keyvault" {
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
-
   sku_name = "standard"
 
-  access_policy {
+    access_policy =   {
+    key_vault_id = "azurerm_key_vault.keyvault"
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
@@ -70,6 +70,21 @@ resource "azurerm_key_vault" "keyvault" {
     ]
   }
 }
+
+data "azuread_service_principal" "example" {
+  display_name = "example-app"
+}
+
+resource "azurerm_key_vault_access_policy" "example-principal" {
+  key_vault_id = azurerm_key_vault.example.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azuread_service_principal.example.object_id
+
+  key_permissions = [
+    "Get", "List", "Encrypt", "Decrypt"
+  ]
+}
+
  resource "azurerm_lb" "TestLoadBalancer" {
  name                = "TestLoadBalancer"
  location            = var.location
