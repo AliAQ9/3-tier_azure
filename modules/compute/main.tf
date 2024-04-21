@@ -142,9 +142,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    publisher = "bansirllc1619470302579"
+    offer     = "006-com-centos-9-stream"
+    sku       = "id-product-plan-centos-idstream"
     version   = "latest"
   }
 }
