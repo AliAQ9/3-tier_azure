@@ -121,3 +121,4 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
+#test
