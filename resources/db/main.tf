@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "azure_project" {
-  name     = "example-resources"
+  name     = var.name
   location = var.location
 }
 
@@ -30,7 +30,7 @@ resource "azurerm_mysql_server" "mysqlserver" {
 
 resource "azurerm_mysql_database" "db" {
   name                = "db"
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.name
   server_name         = var.server_name
   location            = var.location
   charset             = "utf8"
