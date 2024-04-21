@@ -1,12 +1,3 @@
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy    = true
-      recover_soft_deleted_key_vaults = true
-    }
-  }
-}
-
 resource "azurerm_resource_group" "azure_project" {
   name     = var.resource_group_name
   location = var.location
