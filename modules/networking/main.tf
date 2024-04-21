@@ -1,40 +1,47 @@
 resource "azurerm_resource_group" "azure_project" {
-  name     = var.resource_group_name
+  name     = var.name
   location = var.location
 }
+
+resource "azurerm_network_security_group" "vnet-secg" {
+  name                = "vnet-secg"
+  location            = var.location
+  resource_group_name = var.name
+}
+
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.name
   address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "web-subnet" {
   name                 = "web-subnet"
   virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = var.name
   address_prefixes     = [var.websubnetcidr]
 }
 
 resource "azurerm_subnet" "app-subnet" {
   name                 = "app-subnet"
   virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = var.name
   address_prefixes     = [var.appsubnetcidr]
 }
 
 resource "azurerm_subnet" "db-subnet" {
   name                 = "db-subnet"
   virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = var.var.name
   address_prefixes     = [var.dbsubnetcidr]
 }
 
 resource "azurerm_key_vault" "keyvault" {
   name                        = "keyvault"
   location                    = var.location
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = var.name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
@@ -42,7 +49,7 @@ resource "azurerm_key_vault" "keyvault" {
   sku_name = "standard"
 }
 
-    resource  "access_policy" "keyvault" {
+    resource  "azure_key_vault_access_policy" "keyvault" {
     key_vault_id = "azurerm_key_vault.keyvault"
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
@@ -67,26 +74,16 @@ data "azuread_service_principal" "example" {
   display_name = ""
 }
 
-resource "azurerm_key_vault_access_policy" "example-principal" {
-  key_vault_id = "keyvault"
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.example.object_id
-
-  key_permissions = [
-    "Get", "List", "Encrypt", "Decrypt"
-  ]
-}
-
  resource "azurerm_lb" "TestLoadBalancer" {
  name                = "TestLoadBalancer"
  location            = var.location
- resource_group_name = var.resource_group_name
+ resource_group_name = var.name
 }
 
 resource "azurerm_public_ip" "PublicIP" {
  name                = "PublicIP"
 location            = var.location
-resource_group_name = var.resource_group_name
+resource_group_name = var.name
  allocation_method   = "Static"
 }
 
@@ -100,7 +97,7 @@ resource "random_id" "server" {
 
 resource "azurerm_traffic_manager_profile" "traffic_manager" {
   name                   = random_id.server.hex
-  resource_group_name    = var.resource_group_name
+  resource_group_name    = var.name
   traffic_routing_method = "Weighted"
 
   dns_config {
