@@ -20,8 +20,7 @@ resource "azurerm_subnet" "public" {
 
 
 resource "azurerm_network_security_group" "nsg" {
-  count               = length(var.subnet_security_groups)
-  name                = var.subnet_security_groups[count.index]
+  name                = var.security_group_name
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
 }
