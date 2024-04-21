@@ -23,29 +23,29 @@ resource "azurerm_virtual_network" "vnet" {
 
 resource "azurerm_subnet" "web-subnet" {
   name                 = "web-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet01.name
+  virtual_network_name = var.virtual_network_name
   resource_group_name  = var.resource_group_name
   address_prefixes     = [var.websubnetcidr]
 }
 
 resource "azurerm_subnet" "app-subnet" {
   name                 = "app-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet01.name
+  virtual_network_name = var.virtual_network_name
   resource_group_name  = var.resource_group_name
   address_prefixes     = [var.appsubnetcidr]
 }
 
 resource "azurerm_subnet" "db-subnet" {
   name                 = "db-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet01.name
+  virtual_network_name = var.virtual_network_name
   resource_group_name  = var.resource_group_name
   address_prefixes     = [var.dbsubnetcidr]
 }
 
 resource "azurerm_key_vault" "project_keyvault" {
   name                        = "project_keyvault"
-  location                    = azurerm_resource_group.azure_project
-  resource_group_name         = azurerm_resource_group.azure_project
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
@@ -93,7 +93,7 @@ resource "random_id" "server" {
 
 resource "azurerm_traffic_manager_profile" "traffic_manager" {
   name                   = random_id.server.hex
-  resource_group_name    = azurerm_resource_group.azure_project
+  resource_group_name    = var.resource_group_name
   traffic_routing_method = "Weighted"
 
   dns_config {
