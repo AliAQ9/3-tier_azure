@@ -42,8 +42,8 @@ resource "azurerm_subnet" "db-subnet" {
   address_prefixes     = [var.dbsubnetcidr]
 }
 
-resource "azurerm_key_vault" "project_keyvault" {
-  name                        = "project_keyvault"
+resource "azurerm_key_vault" "keyvault" {
+  name                        = "keyvault"
   location                    = var.location
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
