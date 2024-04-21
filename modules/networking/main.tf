@@ -10,35 +10,35 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "azure_project" {
-  name     = var.resource_group
+  name     = var.resource_group_name
   location = var.location
 }
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = var.resource_group_name
   address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "web-subnet" {
   name                 = "web-subnet"
   virtual_network_name = azurerm_virtual_network.vnet01.name
-  resource_group_name  = var.resource_group
+  resource_group_name  = var.resource_group_name
   address_prefixes     = [var.websubnetcidr]
 }
 
 resource "azurerm_subnet" "app-subnet" {
   name                 = "app-subnet"
   virtual_network_name = azurerm_virtual_network.vnet01.name
-  resource_group_name  = var.resource_group
+  resource_group_name  = var.resource_group_name
   address_prefixes     = [var.appsubnetcidr]
 }
 
 resource "azurerm_subnet" "db-subnet" {
   name                 = "db-subnet"
   virtual_network_name = azurerm_virtual_network.vnet01.name
-  resource_group_name  = var.resource_group
+  resource_group_name  = var.resource_group_name
   address_prefixes     = [var.dbsubnetcidr]
 }
 
