@@ -147,8 +147,8 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   }
 }
 
-resource "azurerm_network_interface" "nic" {
-  name                = "project-nic"
+resource "azurerm_network_interface" "web-net-interface" {
+  name                = "web-net-interface"
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
 
@@ -187,8 +187,8 @@ resource "azurerm_linux_virtual_machine" "appserver" {
   }
 }
 
-resource "azurerm_network_interface" "nic" {
-  name                = "project-nic"
+resource "azurerm_network_interface" "app-net-interface" {
+  name                = "app-net-interface"
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
 
