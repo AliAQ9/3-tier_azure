@@ -1,3 +1,3 @@
 name = "azure-task"
-location = "US-east"
+location = "entralus"
 server_name = "db"

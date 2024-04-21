@@ -1,5 +1,5 @@
 name = "azure-task"
-location = "US-east"
+location = "centralus"
 resource_group_name = "azure_project"
 appsubnetcidr = "10.0.2.0/24"
 dbsubnetcidr = "10.0.3.0/24"
