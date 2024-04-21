@@ -7,3 +7,4 @@ variable "appsubnetname" {}
 variable "web_host_name" {}
 variable "app_host_name"{}
 variable "appsubnetcidr" {}
+variable "websubnetcidr" {}

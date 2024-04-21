@@ -89,7 +89,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     ip_configuration {
       name                                   = "internal"
       primary                                = true
-      subnet_id                              = azurerm_subnet.subnet[0].id
+      subnet_id                              = var.websubnetcidr
       load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.lb.id]
     }
   }
