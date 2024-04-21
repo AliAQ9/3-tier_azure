@@ -1,5 +1,5 @@
 resource_group_name = "azure-task"
-location            = "entralus"
+location            = "centralus"
 vnet_name           = "vnet"
 security_group_name  = "compute_sg"
 websubnetname = "websub"
