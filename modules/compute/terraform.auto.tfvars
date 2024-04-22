@@ -1,4 +1,4 @@
-resource_group_name = "azure-task"
+name = "azure-task"
 location            = "centralus"
 vnet_name           = "vnet"
 security_group_name  = "compute_sg"

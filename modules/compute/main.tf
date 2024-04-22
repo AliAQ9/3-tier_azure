@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "azure_project" {
-  name     = var.resource_group_name
+  name     = var.name
   location = var.location
 }
 
@@ -12,7 +12,7 @@ resource "azurerm_virtual_network" "vnet" {
 
 resource "azurerm_subnet" "public" {
   name                 = var.websubnetname
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = var.name
   virtual_network_name = var.vnet_name
   address_prefixes     = var.appsubnetcidr
 }
@@ -20,8 +20,8 @@ resource "azurerm_subnet" "public" {
 
 resource "azurerm_network_security_group" "nsg" {
   name                = var.security_group_name
-  location            = azurerm_resource_group.azure_project.location
-  resource_group_name = azurerm_resource_group.azure_project.name
+  location            = var.name
+  resource_group_name = var.location
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
@@ -40,8 +40,8 @@ resource "azurerm_network_security_rule" "ssh" {
   destination_port_range      = "22"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.azure_project.name
-  network_security_group_name = azurerm_network_security_group.nsg[0].name
+  resource_group_name         = var.name
+  network_security_group_name = var.security_group_name
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
