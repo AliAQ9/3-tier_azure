@@ -160,7 +160,7 @@ resource "azurerm_public_ip" "pip" {
   sku                 = "Standard"
 }
 
-# app server virtual machine
+##### APP SERVER #####
 
 resource "azurerm_network_interface" "app-net-interface" {
   name                = "app-net-interface"
