@@ -8,7 +8,3 @@ variable "web_host_name" {}
 variable "app_host_name"{}
 variable "appsubnetcidr" {}
 variable "websubnetcidr" {}
-variable  "ruslan" {
-    type = list
-    default = ["ruslan1", "ruslan2", "ruslan3"]
-}
