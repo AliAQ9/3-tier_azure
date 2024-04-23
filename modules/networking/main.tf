@@ -103,13 +103,6 @@ resource "azurerm_key_vault" "keyvault" {
     ]
   }
 
-data "azurerm_client_config" "current" {
-}
-
-data "azuread_service_principal" "example" {
-  display_name = ""
-}
-
 resource "random_id" "server" {
   keepers = {
     azi_id = 1
