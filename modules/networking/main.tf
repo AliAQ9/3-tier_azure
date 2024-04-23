@@ -7,6 +7,13 @@ resource "azurerm_resource_group" "azure_project" {
   location = var.location
 }
 
+resource "azurerm_virtual_network" "vnet" {
+  name                = "vnet"
+  location            = var.location
+  resource_group_name = var.name
+  address_space       = ["10.0.0.0/16"]
+}
+
 resource "azurerm_network_security_group" "vnet-secg" {
   name                = "vnet-secg"
   location            = var.location
@@ -24,13 +31,6 @@ resource "azurerm_network_security_group" "vnet-secg" {
   }
 }
 
-
-resource "azurerm_virtual_network" "vnet" {
-  name                = "vnet"
-  location            = var.location
-  resource_group_name = var.name
-  address_space       = ["10.0.0.0/16"]
-}
 
 resource "azurerm_subnet" "web-subnet" {
   name                 = "web-subnet"
