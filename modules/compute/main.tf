@@ -14,7 +14,7 @@ resource "azurerm_subnet" "websub" {
   name                 = var.websubnetname
   resource_group_name  = var.name
   virtual_network_name = var.vnet_name
-  address_prefixes     = var.appsubnetcidr
+  address_prefixes     = var.websubnetcidr
 }
 
 resource "azurerm_network_interface" "web-net-interface" {
@@ -35,13 +35,13 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   resource_group_name = var.name
   location            = var.location
   size                = "Standard_B1ls"
-  admin_username      = "valentinabalan"
+  admin_username      = var.web_username
   network_interface_ids = [
     azurerm_network_interface.web-net-interface
   ]
  
   admin_ssh_key {
-    username   = "valentinabalan"
+    username   = var.web_username
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
@@ -95,7 +95,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   zone_balance         = true
   zones                = [1, 2, 3]
   upgrade_mode         = "Automatic"
-  admin_username       = "valentinabalan"
+  admin_username       = var.web_host_name
   user_data            = base64encode(file("webserver.sh"))
 
   rolling_upgrade_policy {
@@ -106,7 +106,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   admin_ssh_key {
-    username   = "valentinabalan"
+    username   = var.web_username
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
@@ -123,7 +123,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   network_interface {
-    name    = "project-nic"
+    name    = azurerm_network_interface.web-net-interface
     primary = true
 
     ip_configuration {
@@ -179,13 +179,13 @@ resource "azurerm_linux_virtual_machine" "appserver" {
   resource_group_name = var.name
   location            = var.location
   size                = "Standard_B1ls"
-  admin_username      = "valentinabalan"
+  admin_username      = var.app_username
   network_interface_ids = [
     azurerm_network_interface.app-net-interface
   ]
  
   admin_ssh_key {
-    username   = "valentinabalan"
+    username   = var.app_username
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
