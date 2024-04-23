@@ -5,8 +5,8 @@ resource "azurerm_resource_group" "azure_project" {
 
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
-  location            = azurerm_resource_group.azure_project.location
-  resource_group_name = azurerm_resource_group.azure_project.name
+  location            = var.location
+  resource_group_name = var.name
   address_space       = ["10.0.0.0/16"]
 }
 
@@ -17,6 +17,46 @@ resource "azurerm_subnet" "websub" {
   address_prefixes     = var.appsubnetcidr
 }
 
+resource "azurerm_network_interface" "web-net-interface" {
+  name                = "web-net-interface"
+  location            = var.location
+  resource_group_name = var.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = data.azurerm_subnet.websubid
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.pip.id
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "webserver" {
+  name                = var.web_host_name
+  resource_group_name = var.name
+  location            = var.location
+  size                = "Standard_B1ls"
+  admin_username      = "valentinabalan"
+  network_interface_ids = [
+    azurerm_network_interface.web-net-interface
+  ]
+ 
+  admin_ssh_key {
+    username   = "valentinabalan"
+    public_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "bansirllc1619470302579"
+    offer     = "006-com-centos-9-stream"
+    sku       = "id-product-plan-centos-idstream"
+    version   = "latest"
+  }
+}
 
 resource "azurerm_network_security_group" "nsg" {
   name                = var.security_group_name
@@ -26,7 +66,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 resource "azurerm_subnet_network_security_group_association" "public" {
   count                     = length
-  subnet_id                 = azurerm_subnet.subnet[count.index].id
+  subnet_id                 = data.azurerm_subnet.websubid
   network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
 
@@ -47,8 +87,8 @@ resource "azurerm_network_security_rule" "ssh" {
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                 = "vmss"
   computer_name_prefix = "vm"
-  resource_group_name  = azurerm_resource_group.azure_project.name
-  location             = azurerm_resource_group.azure_project.location
+  resource_group_name  = var.name
+  location             = var.location
   sku                  = "Standard_B2ms"
   instances            = 1
   overprovision        = true
@@ -119,46 +159,21 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
-resource "azurerm_linux_virtual_machine" "webserver" {
-  name                = var.web_host_name
+
+# app server virtual machine
+
+resource "azurerm_network_interface" "app-net-interface" {
+  name                = "app-net-interface"
+  location            = var.location
   resource_group_name = var.name
-  location            = var.location
-  size                = "Standard_B1ls"
-  admin_username      = "valentinabalan"
-  network_interface_ids = [
-    azurerm_network_interface.web-net-interface
-  ]
- 
-  admin_ssh_key {
-    username   = "valentinabalan"
-    public_key = file("~/.ssh/id_rsa.pub")
-  }
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  source_image_reference {
-    publisher = "bansirllc1619470302579"
-    offer     = "006-com-centos-9-stream"
-    sku       = "id-product-plan-centos-idstream"
-    version   = "latest"
-  }
-}
-
-resource "azurerm_network_interface" "web-net-interface" {
-  name                = "web-net-interface"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.azure_project.name
 
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.public.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id      = azurerm_public_ip.pip.id
+    name = ""
+    subnet_id = data.azurerm_subnet.appsubid
+    private_ip_address_allocation = "Dyamic"
   }
 }
+
 resource "azurerm_linux_virtual_machine" "appserver" {
   name                = var.app_host_name
   resource_group_name = var.name
@@ -186,10 +201,3 @@ resource "azurerm_linux_virtual_machine" "appserver" {
     version   = "latest"
   }
 }
-/*
-resource "azurerm_network_interface" "app-net-interface" {
-  name                = "app-net-interface"
-  location            = azurerm_resource_group.azure_project.location
-  resource_group_name = var.name
-}
-*/
