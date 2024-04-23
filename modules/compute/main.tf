@@ -58,30 +58,40 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   }
 }
 
-resource "azurerm_network_security_group" "nsg" {
-  name                = var.security_group_name
-  location            = var.name
-  resource_group_name = var.location
+resource "azurerm_network_security_group" "web-secg" {
+  name                = "web-secg"
+  location            = var.location
+  resource_group_name = var.name
+
+  security_rule {
+    name                       = "HTTP"
+    priority                   = 102
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "80"
+    destination_port_range     = "80"
+    source_address_prefix      = "0.0.0.0/0"
+    destination_address_prefix = "0.0.0.0/0"
+  }
+
+  security_rule {
+    name                       = "HTTPS"
+    priority                   = 103
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "443"
+    destination_port_range     = "443"
+    source_address_prefix      = "0.0.0.0/0"
+    destination_address_prefix = "0.0.0.0/0"
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
   count                     = length
   subnet_id                 = data.azurerm_subnet.websubid
-  network_security_group_id = azurerm_network_security_group.nsg[count.index].id
-}
-
-resource "azurerm_network_security_rule" "ssh" {
-  name                        = "ssh"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "22"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = var.name
-  network_security_group_name = var.security_group_name
+  network_security_group_id = data.azurerm_network_security_group.web-secg
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
@@ -123,7 +133,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   network_interface {
-    name    = azurerm_network_interface.web-net-interface
+    name    = data.azurerm_network_interface.web-net-interface
     primary = true
 
     ip_configuration {
