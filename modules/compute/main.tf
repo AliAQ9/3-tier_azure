@@ -89,7 +89,6 @@ resource "azurerm_network_security_group" "web-secg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  count                     = length
   subnet_id                 = data.azurerm_subnet.websubid
   network_security_group_id = data.azurerm_network_security_group.web-secg
 }
