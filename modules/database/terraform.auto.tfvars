@@ -1,6 +1,6 @@
 name = "azure-task"
 location = "centralus"
-server_name = "db"
+server_name = "azdb"
 virtual_network_name = "vnet"
 dbsubnetname = "dbsub"
 dbsubnetcidr = "10.0.3.0/24"
