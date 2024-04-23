@@ -10,7 +10,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
 }
 
-resource "azurerm_subnet" "public" {
+resource "azurerm_subnet" "websub" {
   name                 = var.websubnetname
   resource_group_name  = var.name
   virtual_network_name = var.vnet_name
@@ -97,8 +97,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
 
 resource "azurerm_lb" "lb" {
   name                = "loadbalancer"
-  location            = azurerm_resource_group.azure_project.location
-  resource_group_name = azurerm_resource_group.azure_project.name
+  location            = var.location
+  resource_group_name = var.name
   sku                 = "Standard"
 
   frontend_ip_configuration {
@@ -114,15 +114,15 @@ resource "azurerm_lb_backend_address_pool" "lb" {
 
 resource "azurerm_public_ip" "pip" {
   name                = "pip"
-  resource_group_name = azurerm_resource_group.azure_project.name
-  location            = azurerm_resource_group.azure_project.location
+  resource_group_name = var.name
+  location            = var.location
   allocation_method   = "Static"
   sku                 = "Standard"
 }
 resource "azurerm_linux_virtual_machine" "webserver" {
   name                = var.web_host_name
-  resource_group_name = azurerm_resource_group.azure_project.name
-  location            = azurerm_resource_group.azure_project.location
+  resource_group_name = var.name
+  location            = var.location
   size                = "Standard_B1ls"
   admin_username      = "valentinabalan"
   network_interface_ids = [
@@ -149,7 +149,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
 
 resource "azurerm_network_interface" "web-net-interface" {
   name                = "web-net-interface"
-  location            = azurerm_resource_group.azure_project.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.azure_project.name
 
   ip_configuration {
@@ -161,8 +161,8 @@ resource "azurerm_network_interface" "web-net-interface" {
 }
 resource "azurerm_linux_virtual_machine" "appserver" {
   name                = var.app_host_name
-  resource_group_name = azurerm_resource_group.azure_project.name
-  location            = azurerm_resource_group.azure_project.location
+  resource_group_name = var.name
+  location            = var.location
   size                = "Standard_B1ls"
   admin_username      = "valentinabalan"
   network_interface_ids = [
@@ -190,6 +190,6 @@ resource "azurerm_linux_virtual_machine" "appserver" {
 resource "azurerm_network_interface" "app-net-interface" {
   name                = "app-net-interface"
   location            = azurerm_resource_group.azure_project.location
-  resource_group_name = azurerm_resource_group.azure_project.name
+  resource_group_name = var.name
 }
 */
