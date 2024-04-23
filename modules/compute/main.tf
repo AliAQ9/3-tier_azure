@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  count                     = length
+  count                     = length(var.ruslan)
   subnet_id                 = azurerm_subnet.subnet[count.index].id
   network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
@@ -154,7 +154,7 @@ resource "azurerm_network_interface" "web-net-interface" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = web_host_name.public1.id
+    subnet_id                     = azurerm_subnet.public.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id      = azurerm_public_ip.pip.id
   }
@@ -186,16 +186,10 @@ resource "azurerm_linux_virtual_machine" "appserver" {
     version   = "latest"
   }
 }
-
+/*
 resource "azurerm_network_interface" "app-net-interface" {
   name                = "app-net-interface"
   location            = azurerm_resource_group.azure_project.location
   resource_group_name = azurerm_resource_group.azure_project.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.public1.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id      = azurerm_public_ip.pip.id
-  }
 }
+*/
