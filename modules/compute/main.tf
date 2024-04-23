@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  count                     = length(var.)
+  count                     = length
   subnet_id                 = azurerm_subnet.subnet[count.index].id
   network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
