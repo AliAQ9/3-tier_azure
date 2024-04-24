@@ -24,8 +24,8 @@ resource "azurerm_subnet" "websub" {
   address_prefixes     = [var.websubnetcidr]
 }
 
-resource "azurerm_network_interface" "webnetIF" {
-  name                = "webnetIF"
+resource "azurerm_network_interface" "webnet_if" {
+  name                = "webnet_if"
   location            = var.location
   resource_group_name = var.name
 
@@ -117,8 +117,8 @@ resource "azurerm_subnet" "app-subnet" {
   address_prefixes     = [var.appsubnetcidr]
 }
 
-resource "azurerm_network_interface" "appnetIF" {
-  name                = "appnetIF"
+resource "azurerm_network_interface" "appnet_if" {
+  name                = "appnet_if"
   location            = var.location
   resource_group_name = var.name
 
@@ -136,7 +136,7 @@ resource "azurerm_linux_virtual_machine" "appserver" {
   size                = "Standard_B1ls"
   admin_username      = var.app_username
   network_interface_ids = [
-    azurerm_network_interface.appnetIF.name
+    azurerm_network_interface.appnet_if.name
   ]
  
   admin_ssh_key {
@@ -221,7 +221,7 @@ resource "azurerm_subnet_network_security_group_association" "app-secg" {
   }
 
   network_interface {
-    name    = azurerm_network_interface.webnetIF.name
+    name    = azurerm_network_interface.webnet_if.name
     primary = true
 
     ip_configuration {
