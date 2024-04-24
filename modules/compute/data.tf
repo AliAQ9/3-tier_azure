@@ -17,7 +17,7 @@ data  "web-secg" "id" {
 
 
 
-data "azurerm_subnet" "appsubid" {
+data "azurerm_subnet" "websubid" {
   name                 = "appsubid"
   virtual_network_name = var.vnet_name
   resource_group_name  = var.name

@@ -10,6 +10,8 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
 }
 
+
+
 resource "azurerm_subnet" "websub" {
   name                 = var.websubnetname
   resource_group_name  = var.name
@@ -23,8 +25,8 @@ resource "azurerm_network_interface" "web-net-interface" {
   resource_group_name = var.name
 
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = data.azurerm_subnet.websubid.id
+    name                          = "web-ip-config"
+    subnet_id                     = data.azurerm_subnet.websubid
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
@@ -97,8 +99,17 @@ resource "azurerm_network_security_group" "web-secg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "web-secg" {
-  subnet_id                 = data.azurerm_subnet.websubid.id
+  subnet_id                 = data.azurerm_subnet.websubid
   network_security_group_id = data.azurerm_network_security_group.web-secg.id
+}
+
+
+
+resource "azurerm_subnet" "app-subnet" {
+  name                 = "app-subnet"
+  virtual_network_name = var.vnet_name
+  resource_group_name  = var.name
+  address_prefixes     = [var.appsubnetcidr]
 }
 
 resource "azurerm_network_interface" "app-net-interface" {
@@ -107,8 +118,8 @@ resource "azurerm_network_interface" "app-net-interface" {
   resource_group_name = var.name
 
   ip_configuration {
-    name = ""
-    subnet_id = data.azurerm_subnet.appsubid.id
+    name = "app-ip-config"
+    subnet_id = data.azurerm_subnet.appsubid
     private_ip_address_allocation = "Dyamic"
   }
 }
@@ -163,6 +174,8 @@ resource "azurerm_subnet_network_security_group_association" "app-secg" {
   subnet_id                 = data.azurerm_subnet.appsubid
   network_security_group_id = data.azurerm_network_security_group.app-secg.id
 }
+
+
 
   resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                 = "vmss"
