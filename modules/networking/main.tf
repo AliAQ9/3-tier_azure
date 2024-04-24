@@ -31,7 +31,7 @@ resource "azurerm_subnet" "app-subnet" {
 resource "azurerm_subnet" "db-subnet" {
   name                 = "db-subnet"
   virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.var.name
+  resource_group_name  = var.name
   address_prefixes     = [var.dbsubnetcidr]
 }
 
