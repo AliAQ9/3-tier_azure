@@ -176,7 +176,7 @@ resource "azurerm_network_security_group" "app-secg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "app-secg" {
-  subnet_id                 = data.azurerm_subnet.appsubid
+  subnet_id                 = azurerm_subnet.app-subnet.id
   network_security_group_id = data.azurerm_network_security_group.app-secg.id
 }
 
