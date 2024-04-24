@@ -24,8 +24,8 @@ resource "azurerm_subnet" "websub" {
   address_prefixes     = [var.websubnetcidr]
 }
 
-resource "azurerm_network_interface" "web-net-interface" {
-  name                = "web-net-interface"
+resource "azurerm_network_interface" "win" {
+  name                = "win"
   location            = var.location
   resource_group_name = var.name
 
@@ -52,7 +52,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   size                = "Standard_B1ls"
   admin_username      = var.web_username
   network_interface_ids = [
-    azurerm_network_interface.web-net-interface.name
+    azurerm_network_interface.win.name
   ]
  
   admin_ssh_key {
