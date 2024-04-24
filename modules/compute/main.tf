@@ -3,6 +3,11 @@ resource "azurerm_resource_group" "azure_project" {
   location = var.location
 }
 
+provider "azurerm" {
+  features {}
+}
+
+
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
   location            = var.location
