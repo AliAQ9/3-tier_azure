@@ -240,14 +240,6 @@ resource "azurerm_lb" "lb" {
   }
 }
 
-resource "azurerm_public_ip" "pip" {
-  name                = "pip"
-  resource_group_name = var.name
-  location            = var.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
-
 resource "azurerm_lb_backend_address_pool" "lb" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "backendpool"
