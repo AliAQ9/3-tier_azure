@@ -7,7 +7,7 @@ output "app_subnet_id" {
 }
 
 output "web-secg" {
-  value = data.azurerm_network_security_group.web-secg
+  value = data.azurerm_network_security_group.web-secg.id
 }
 
 output "web-net-interace" {
