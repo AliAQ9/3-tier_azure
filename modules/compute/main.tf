@@ -52,7 +52,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
   size                = "Standard_B1ls"
   admin_username      = var.web_username
   network_interface_ids = [
-    azurerm_network_interface.webnetIF.name
+    azurerm_network_interface.webnet_if.name
   ]
  
   admin_ssh_key {
