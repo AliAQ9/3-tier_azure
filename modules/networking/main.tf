@@ -110,10 +110,3 @@ resource "random_id" "server" {
 
   byte_length = 8
 }
-
-resource "azurerm_public_ip" "PublicIP" {
- name                = "PublicIP"
-location            = var.location
-resource_group_name = var.name
- allocation_method   = "Static"
-}
