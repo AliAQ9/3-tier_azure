@@ -21,7 +21,7 @@ resource "azurerm_subnet" "websub" {
   name                 = var.websubnetname
   resource_group_name  = var.name
   virtual_network_name = var.vnet_name
-  address_prefixes     = var.websubnetcidr
+  address_prefixes     = [var.websubnetcidr]
 }
 
 resource "azurerm_network_interface" "web-net-interface" {
