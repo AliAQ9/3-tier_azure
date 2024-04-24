@@ -16,3 +16,7 @@ data  "web-secg" "id" {
   resource_group_name = var.name
 }
 
+ data "azurerm_network_interface" "web-net-interface" {
+  name = "web-net-interface"
+  resource_group_name = var.name
+}
