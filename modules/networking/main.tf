@@ -111,12 +111,6 @@ resource "random_id" "server" {
   byte_length = 8
 }
 
- resource "azurerm_lb" "TestLoadBalancer" {
- name                = "TestLoadBalancer"
- location            = var.location
- resource_group_name = var.name
-}
-
 resource "azurerm_public_ip" "PublicIP" {
  name                = "PublicIP"
 location            = var.location
