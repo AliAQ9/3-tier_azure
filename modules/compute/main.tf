@@ -24,7 +24,7 @@ resource "azurerm_network_interface" "web-net-interface" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = data.azurerm_subnet.websubid
+    subnet_id                     = data.azurerm_subnet.websubid.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
@@ -89,7 +89,7 @@ resource "azurerm_network_security_group" "web-secg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  subnet_id                 = data.azurerm_subnet.websubid
+  subnet_id                 = data.azurerm_subnet.websubid.id
   network_security_group_id = data.azurerm_network_security_group.web-secg
 }
 
@@ -178,7 +178,7 @@ resource "azurerm_network_interface" "app-net-interface" {
 
   ip_configuration {
     name = ""
-    subnet_id = data.azurerm_subnet.appsubid
+    subnet_id = data.azurerm_subnet.appsubid.id
     private_ip_address_allocation = "Dyamic"
   }
 }
