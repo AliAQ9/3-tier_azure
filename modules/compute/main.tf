@@ -31,7 +31,7 @@ resource "azurerm_network_interface" "web-net-interface" {
 
   ip_configuration {
     name                          = "web-ip-config"
-    subnet_id                     = data.azurerm_subnet.websubid
+    subnet_id                     = azurerm_subnet.websub.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
@@ -124,7 +124,7 @@ resource "azurerm_network_interface" "app-net-interface" {
 
   ip_configuration {
     name = "app-ip-config"
-    subnet_id = data.azurerm_subnet.appsubid
+    subnet_id = azurerm_subnet.app-subnet.id
     private_ip_address_allocation = "Dyamic"
   }
 }
