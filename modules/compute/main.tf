@@ -101,8 +101,6 @@ resource "azurerm_subnet_network_security_group_association" "web-secg" {
   network_security_group_id = data.azurerm_network_security_group.web-secg.id
 }
 
-##### APP SERVER #####
-
 resource "azurerm_network_interface" "app-net-interface" {
   name                = "app-net-interface"
   location            = var.location
@@ -143,33 +141,27 @@ resource "azurerm_linux_virtual_machine" "appserver" {
   }
 }
 
-resource "azurerm_traffic_manager_profile" "traffic_manager" {
-  name                   = random_id.server.hex
-  resource_group_name    = var.name
-  traffic_routing_method = "Weighted"
+resource "azurerm_network_security_group" "app-secg" {
+  name                = "app-secg"
+  location            = var.location
+  resource_group_name = var.name
 
-  dns_config {
-    relative_name = random_id.server.hex
-    ttl           = 100
+  security_rule {
+    name                       = "SSH"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "22"
+    destination_port_range     = "22"
+    source_address_prefix      = "0.0.0.0/0"
+    destination_address_prefix = "0.0.0.0/0"
   }
+}
 
-  monitor_config {
-    protocol                     = "HTTP"
-    port                         = 80
-    path                         = "/"
-    interval_in_seconds          = 30
-    timeout_in_seconds           = 9
-    tolerated_number_of_failures = 3
-  }
-
-  }
-
-  resource "random_id" "server" {
-  keepers = {
-    azi_id = 1
-  }
-
-  byte_length = 8
+resource "azurerm_subnet_network_security_group_association" "app-secg" {
+  subnet_id                 = data.azurerm_subnet.appsubid
+  network_security_group_id = data.azurerm_network_security_group.app-secg.id
 }
 
   resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
@@ -246,4 +238,33 @@ resource "azurerm_public_ip" "pip" {
 resource "azurerm_lb_backend_address_pool" "lb" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "backendpool"
+}
+
+resource "azurerm_traffic_manager_profile" "traffic_manager" {
+  name                   = random_id.server.hex
+  resource_group_name    = var.name
+  traffic_routing_method = "Weighted"
+
+  dns_config {
+    relative_name = random_id.server.hex
+    ttl           = 100
+  }
+
+  monitor_config {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 9
+    tolerated_number_of_failures = 3
+  }
+
+  }
+
+  resource "random_id" "server" {
+  keepers = {
+    azi_id = 1
+  }
+
+  byte_length = 8
 }

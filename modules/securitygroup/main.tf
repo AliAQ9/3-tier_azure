@@ -24,8 +24,8 @@ resource "azurerm_network_security_group" "vnet-secg" {
   }
 }
 
-resource "azurerm_network_security_group" "ssh-secg" {
-  name                = "ssh-secg"
+resource "azurerm_network_security_group" "app-secg" {
+  name                = "app-secg"
   location            = var.location
   resource_group_name = var.name
 
@@ -42,8 +42,8 @@ resource "azurerm_network_security_group" "ssh-secg" {
   }
 }
 
-resource "azurerm_network_security_group" "http-secg" {
-  name                = "http-secg"
+resource "azurerm_network_security_group" "web-secg" {
+  name                = "web-secg"
   location            = var.location
   resource_group_name = var.name
 
