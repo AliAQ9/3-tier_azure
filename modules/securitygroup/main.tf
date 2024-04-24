@@ -58,14 +58,8 @@ resource "azurerm_network_security_group" "http-secg" {
     source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "0.0.0.0/0"
   }
-}
 
-resource "azurerm_network_security_group" "https-secg" {
-  name                = "https-secg"
-  location            = var.location
-  resource_group_name = var.name
-
-  security_rule {
+   security_rule {
     name                       = "HTTPS"
     priority                   = 103
     direction                  = "Outbound"
@@ -78,8 +72,8 @@ resource "azurerm_network_security_group" "https-secg" {
   }
 }
 
-resource "azurerm_network_security_group" "mysql-secg" {
-  name                = "mysql-secg"
+resource "azurerm_network_security_group" "db-secg" {
+  name                = "db-secg"
   location            = var.location
   resource_group_name = var.name
 
