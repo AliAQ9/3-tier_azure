@@ -7,10 +7,9 @@ provider "azurerm" {
   }
 }
 
-module "resourcegroup" {
-  source         = "./modules/resourcegroup"
-  name           = var.name
-  location       = var.location
+resource "azurerm_resource_group" "azure-task" {
+  name     = var.name
+  location = var.location
 }
 
 resource "azurerm_key_vault" "keyvault" {
