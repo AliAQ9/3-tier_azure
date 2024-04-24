@@ -104,8 +104,8 @@ resource "azurerm_network_security_group" "web-secg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "web-secg" {
-  subnet_id                 = data.azurerm_subnet.websubid
-  network_security_group_id = data.azurerm_network_security_group.web-secg.id
+  subnet_id                 = azurerm_subnet.websub.id
+  network_security_group_id = azurerm_network_security_group.web-secg.id
 }
 
 
