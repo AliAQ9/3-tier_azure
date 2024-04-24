@@ -221,7 +221,7 @@ resource "azurerm_subnet_network_security_group_association" "app-secg" {
   }
 
   network_interface {
-    name    = azurerm_network_interface.web-net-interface.name
+    name    = azurerm_network_interface.win.name
     primary = true
 
     ip_configuration {
