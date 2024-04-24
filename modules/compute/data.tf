@@ -9,3 +9,14 @@ data "azurerm_subnet" "appsubid" {
   virtual_network_name = var.vnet_name
   resource_group_name  = var.name
 }
+
+data "azurerm_subnet_network_security_group_association" "web-secg" {
+  name = "web-secg"
+  virtual_network_name = var.vnet_name
+  resource_group_name = var.name
+}
+
+#data "azurerm_network_interface" "web-net-interface" {
+ # name = "web-net-interface"
+
+#}

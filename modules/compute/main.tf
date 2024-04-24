@@ -88,9 +88,9 @@ resource "azurerm_network_security_group" "web-secg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "public" {
+resource "azurerm_subnet_network_security_group_association" "web-secg" {
   subnet_id                 = data.azurerm_subnet.websubid.id
-  network_security_group_id = data.azurerm_network_security_group.web-secg
+  network_security_group_id = data.azurerm_network_security_group.web-secg.id
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
