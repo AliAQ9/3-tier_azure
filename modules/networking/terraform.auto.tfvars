@@ -4,6 +4,5 @@ appsubnetcidr = "10.0.2.0/24"
 dbsubnetcidr = "10.0.3.0/24"
 websubnetcidr = "10.0.1.0/24"
 virtual_network_name = "vnet"
-UUID = (string) 
 web_username = "web_user"
 web_host_name = "webserver"
