@@ -35,7 +35,6 @@ resource "azurerm_mysql_database" "db" {
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
 
-  # prevent the possibility of accidental data loss
   lifecycle {
     prevent_destroy = true
   }
